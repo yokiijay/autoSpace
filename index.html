@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+   <head>
+      <script type="text/javascript" src="text-autospace.js/text-autospace.js"></script>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <meta name="description" content="为什么我就是能这样娴熟地加上空格呢？">
+      <title>为什么我就是能这样娴熟地加上空格呢？</title>
+      <link type="text/css" rel="stylesheet" href="stylesheets/theme.css" />
+      <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+      <meta http-equiv="x-dns-prefetch-control" content="off"/>
+
+   </head>
+   <body>
+      <!-- HEADER -->
+      <div id="header_wrap" class="outer">
+         <header class="inner">
+            <a id="forkme_banner" href="https://github.com/zizhengwu/daft-auto-spacing">View on GitHub</a>
+            <h1 id="project_title">为什么我就是能这样娴熟地加上空格呢？</h1>
+            <h2 id="project_tagline"></h2>
+         </header>
+      </div>
+      <!-- MAIN CONTENT -->
+      <div id="main_content_wrap" class="outer">
+         <section id="main_content" class="inner">
+            <div class="row">
+               <div class="large-6 medium-6 columns">
+                  <div class="row">
+                     <div class="large-12 columns">
+                        <label for="post">一些文字</label>
+                           <textarea name="content" class="no-space" rows="15"  wrap="hard" style="font-size: 12pt"></textarea>
+                     </div>
+                     <div class="large-12 columns">
+                        <button class="space-god">空格之神</button>
+                     </div>
+                  </div>
+               </div>
+               <div class="large-6 medium-6 columns">
+                  <label for="new_post">盘古之白</label>
+                  <textarea onmouseover="this.select()" class="with-space" rows="15" style="font-size: 12pt" readonly></textarea>
+               </div>
+            </div>
+         </section>
+      </div>
+      <!-- FOOTER  -->
+      <div id="footer_wrap" class="outer">
+         <footer class="inner">
+            <p class="copyright">为什么我就是能这样娴熟地加上空格呢？ maintained by <a href="https://github.com/zizhengwu">Zizheng Wu</a></p>
+            <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+         </footer>
+      </div>
+
+      <script>
+         const str = document.querySelector('.no-space').value
+         const autoSpace = new AutoSpace(str);
+         const initValue = autoSpace.spacing()
+
+         // 初始化显示 盘古之白
+         document.querySelector('.with-space').value = initValue
+         // 点击 空格之神
+         document.querySelector('.space-god').addEventListener('click', ()=>{
+            const str = document.querySelector('.no-space').value
+            const autoSpace = new AutoSpace(str);
+            const value = autoSpace.spacing()
+            document.querySelector('.with-space').value = value
+            const min = 32, max = 48
+
+            const wrapStr = str.replace(/\n/g,'@wrap@')
+            let arrStr = wrapStr.split(/@wrap@/g)
+
+            arrStr.map((val,index)=>{
+               if(val.length > 32 && val.length < 48){
+                  console.log(val.replace(//,))
+               }
+            })
+         })
+      </script>
+   </body>
+</html>
