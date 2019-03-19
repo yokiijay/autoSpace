@@ -10,6 +10,7 @@ In this line有33个字In this line有33个字In this line有33个字啊啊啊'
 const autoSpace = new AutoSpace()
 const output = autoSpace.spacing(str,32,48,'##') //参数1传入字符串，2传入最小值，3传入最大值，4传入插入的字符串
 console.log(output)
+
 <!-- 这行应该大约有 40 个字这行应该大约有 40 个字##这行应该大约有 40 个字这行应该大约有 40 个字
 本行有 35 字本行有 35 字本行有 35 字本行有##35 字本行有 35 字本行有 35 字本行有 35 字
 到这一行就只有 30 个字到这一行就只有 30 个字到这一行就只有 30 个字
