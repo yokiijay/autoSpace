@@ -50,28 +50,22 @@
       </div>
 
       <script>
-         const str = document.querySelector('.no-space').value
-         const autoSpace = new AutoSpace(str);
-         const initValue = autoSpace.spacing()
-
+         // 获取 dom
+         const noSpace = document.querySelector('.no-space')
+         const withSpace = document.querySelector('.with-space')
+         // 一些常量
+         const str = '这行应该大约有40个字这行应该大约有40个字这行应该大约有40个字这行应该大约有40个字\n本行有35字本行有35字本行有35字本行有35字本行有35字本行有35字本行有35字\n到这一行就只有30个字到这一行就只有30个字到这一行就只有30个字\nIn this line有33个字In this line有33个字In this line有33个字啊啊啊' //初始获取输入的值
+         const autoSpace = new AutoSpace(); //autoSpace对象 
+         const initValue = autoSpace.spacing(str,32,48,'\#\#') //调用对象方法 参数1传入输入的值 2传入min 3传入max
+         
          // 初始化显示 盘古之白
-         document.querySelector('.with-space').value = initValue
+         noSpace.value = str
+         withSpace.value = initValue
          // 点击 空格之神
          document.querySelector('.space-god').addEventListener('click', ()=>{
-            const str = document.querySelector('.no-space').value
-            const autoSpace = new AutoSpace(str);
-            const value = autoSpace.spacing()
-            document.querySelector('.with-space').value = value
-            const min = 32, max = 48
-
-            const wrapStr = str.replace(/\n/g,'@wrap@')
-            let arrStr = wrapStr.split(/@wrap@/g)
-
-            arrStr.map((val,index)=>{
-               if(val.length > 32 && val.length < 48){
-                  console.log(val.replace(//,))
-               }
-            })
+            const str = noSpace.value
+            const autoSpace = new AutoSpace();
+            withSpace.value = autoSpace.spacing(str,32,48,'\#\#')
          })
       </script>
    </body>
