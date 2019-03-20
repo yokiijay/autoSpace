@@ -23,26 +23,39 @@ function AutoSpace() {
         let latin = unicode_set('latin') + '|' + unicode['punc'][0];
         let punc = unicode['punc'];
         let patterns = ['/(' + hanzi + ')(' + latin + '|' + punc[1] + ')/ig', '/(' + latin + '|' + punc[2] + ')(' + hanzi + ')/ig'];
-        let text = ''
+        let newStr = ''
+
+        patterns.forEach(function(exp) {
+            str = str.replace(eval(exp), '$1 $2');
+        },
+        this);
 
         const wrapStr = str.replace(/\n/g,'@wrap@')
         let arrStr = wrapStr.split(/@wrap@/g)
-        let newStr = arrStr.map((val,index)=>{
-            console.log(val.length)
+        str = arrStr.map((val,index)=>{
             if(val.gblen() > min*2 && val.gblen() < max*2){
                 const strIndex = Math.round(val.length/2)
-                const newStr = val.substring(0,strIndex)+`${insert=insert?insert:'\#\#'}`+val.substring(strIndex)
+                let strLeft = val.substring(0,strIndex)
+                let strRight = val.substring(strIndex)
+                let newStr = ''
+
+                const ifLetterFirst = new RegExp(`^${unicode['latin'][0]}+`).test(strRight)
+                                    || new RegExp(`^${unicode['punc'][0]}+`).test(strRight)
+                if(ifLetterFirst){
+                    console.log(strRight,val)
+                    strRight = strRight.replace(/\s/,`${insert} `)
+                }else{
+                    console.log(strRight,val)
+                    strRight = insert+strRight
+                }
+                newStr = strLeft+strRight
                 return newStr
             }else{
                 return val
             }
         }).join('\n')
         
-        patterns.forEach(function(exp) {
-            newStr = newStr.replace(eval(exp), '$1 $2');
-        },
-        this);
-        return newStr
+        return str
     }
 }
 
