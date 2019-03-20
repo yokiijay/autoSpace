@@ -18,7 +18,8 @@ function AutoSpace() {
         return result;
     };
 
-    this.spacing = (str,min,max,insert)=>{
+    this.spacing = (str,insert,min,max)=>{
+        max = max ? max : Number.POSITIVE_INFINITY
         let hanzi = unicode_set('hanzi');
         let latin = unicode_set('latin') + '|' + unicode['punc'][0];
         let punc = unicode['punc'];
@@ -42,10 +43,8 @@ function AutoSpace() {
                 const ifLetterFirst = new RegExp(`^${unicode['latin'][0]}+`).test(strRight)
                                     || new RegExp(`^${unicode['punc'][0]}+`).test(strRight)
                 if(ifLetterFirst){
-                    console.log(strRight,val)
                     strRight = strRight.replace(/\s/,`${insert} `)
                 }else{
-                    console.log(strRight,val)
                     strRight = insert+strRight
                 }
                 newStr = strLeft+strRight

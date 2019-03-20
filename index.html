@@ -14,7 +14,7 @@
       <!-- HEADER -->
       <div id="header_wrap" class="outer">
          <header class="inner">
-            <a id="forkme_banner" href="https://github.com/zizhengwu/daft-auto-spacing">View on GitHub</a>
+            <a id="forkme_banner" href="https://github.com/yokiijay/autoSpace">View on GitHub</a>
             <h1 id="project_title">为什么我就是能这样娴熟地加上空格呢？</h1>
             <h2 id="project_tagline"></h2>
          </header>
@@ -23,6 +23,12 @@
       <div id="main_content_wrap" class="outer">
          <section id="main_content" class="inner">
             <div class="row">
+               <div style="text-align: center;">
+                  规定一行字数:<br>大于<input size="2" id="min" type="text" value="32" style="display:inline-block;width:auto">
+                  且小于<input size="12" id="max" type="text" placeholder="默认不设上限" value="" style="display:inline-block;width:auto">
+                  时在该行中间插入字段
+                  <input id="insert" type="text" value="##" style="display:inline-block;width:auto">
+               </div>
                <div class="large-6 medium-6 columns">
                   <div class="row">
                      <div class="large-12 columns">
@@ -53,10 +59,13 @@
          // 获取 dom
          const noSpace = document.querySelector('.no-space')
          const withSpace = document.querySelector('.with-space')
+         const min = document.getElementById('min')
+         const max = document.getElementById('max')
+         const insert = document.getElementById('insert')
          // 一些常量
          const str = '这行应该大约有40个字这行应该大约有40个字这行应该大约有40个字这行应该大约有40个字\n本行有35字本行有35字本行有35字本行有35字本行有35字本行有35字本行有35字\n到这一行就只有30个字到这一行就只有30个字到这一行就只有30个字\nIn this line有33个字In this line有33个字In this line有33个字啊啊啊' //初始获取输入的值
          const autoSpace = new AutoSpace(); //autoSpace对象 
-         const initValue = autoSpace.spacing(str,32,48,'\#\#') //调用对象方法 参数1传入输入的值 2传入min 3传入max
+         const initValue = autoSpace.spacing(str,insert.value,min.value,max.value) //调用对象方法 参数1传入输入的值 2传入插入的字符串 3传入一行字数条件
          
          // 初始化显示 盘古之白
          noSpace.value = str
@@ -65,7 +74,7 @@
          document.querySelector('.space-god').addEventListener('click', ()=>{
             const str = noSpace.value
             const autoSpace = new AutoSpace();
-            withSpace.value = autoSpace.spacing(str,1,48,'\#\#')
+            withSpace.value = autoSpace.spacing(str,insert.value,min.value,max.value)
          })
       </script>
    </body>
