@@ -1,4 +1,4 @@
-# 改自(https://github.com/zizhengwu/daft-auto-spacing)[https://github.com/zizhengwu/daft-auto-spacing]
+# 改自[https://github.com/zizhengwu/daft-auto-spacing](https://github.com/zizhengwu/daft-auto-spacing)
 =================
 ## Api使用说明 
 ```
