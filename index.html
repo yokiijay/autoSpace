@@ -23,11 +23,26 @@
       <div id="main_content_wrap" class="outer">
          <section id="main_content" class="inner">
             <div class="row">
-               <div style="text-align: center;">
-                  规定一行字数:<br>大于<input size="2" id="min" type="text" value="32" style="display:inline-block;width:auto">
-                  且小于<input size="12" id="max" type="text" placeholder="默认不设上限" value="" style="display:inline-block;width:auto">
+               <div>
+                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每行：
+                  <input type="radio" name="insert" value='false' checked> 不插入&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input id="onOff" type="radio" name="insert" value='true' >&nbsp;&nbsp;
+                  大于<input size="2" id="min" type="number" value="32" style="display:inline-block;width:60px">
+                  且小于<input size="12" id="max" type="number" placeholder="默认不设上限" value="" style="display:inline-block;width:60px">
                   时在该行中间插入字段
-                  <input id="insert" type="text" value="##" style="display:inline-block;width:auto">
+                  <input id="insert" type="text" value="##" style="display:inline-block;width:40px">
+               </div>
+               <div>
+                  半角符号：
+                  <input type="radio" name="punc" checked> 不清除&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input type="radio" name="punc"> 清除全部&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input type="radio" name="punc"> 清除 <input type="text" placeholder="填入你想清除的符号" style="display:inline-block;width:180px;">
+               </div>
+               <div>
+                  全角符号：
+                  <input type="radio" name="biaodian" checked> 不清除&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input type="radio" name="biaodian"> 清除全部&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input type="radio" name="biaodian"> 清除 <input type="text" placeholder="填入你想清除的符号" style="display:inline-block;width:180px;">
                </div>
                <div class="large-6 medium-6 columns">
                   <div class="row">
@@ -36,10 +51,10 @@
                            <textarea name="content" class="no-space" rows="15"  wrap="hard" style="font-size: 12pt"></textarea>
                      </div>
                      <div class="large-12 columns">
-                        <button class="space-god">空格之神</button>
+                        <button class="space-god" style="visibility: hidden">空格之神</button>
                      </div>
                   </div>
-               </div>d
+               </div>
                <div class="large-6 medium-6 columns">
                   <label for="new_post">盘古之白</label>
                   <textarea onmouseover="this.select()" class="with-space" rows="15" style="font-size: 12pt" readonly></textarea>
@@ -59,22 +74,41 @@
          // 获取 dom
          const noSpace = document.querySelector('.no-space')
          const withSpace = document.querySelector('.with-space')
+         const spaceGod = document.querySelector('.space-god')
          const min = document.getElementById('min')
          const max = document.getElementById('max')
          const insert = document.getElementById('insert')
+         const onOff = document.getElementById('onOff')
+
+         const radioInsert = document.getElementsByName('insert')
+         const radioPunc = document.getElementsByName('punc')
+         const radioBiaodian = document.getElementsByName('biaodian')
+
          // 一些常量
          const str = '这行应该大约有40个字这行应该大约有40个字这行应该大约有40个字这行应该大约有40个字\n本行有35字本行有35字本行有35字本行有35字本行有35字本行有35字本行有35字\n到这一行就只有30个字到这一行就只有30个字到这一行就只有30个字\nIn this line有33个字In this line有33个字In this line有33个字啊啊啊' //初始获取输入的值
          const autoSpace = new AutoSpace(); //autoSpace对象 
-         const initValue = autoSpace.spacing(str,insert.value,min.value,max.value) //调用对象方法 参数1传入输入的值 2传入插入的字符串 3传入一行字数条件
+         const initValue = onOff.checked ? autoSpace.spacing(str,insert.value,min.value,max.value) 
+                        : autoSpace.spacing(str,'',min.value,max.value)  //调用对象方法 参数1传入输入的值 2传入插入的字符串 3传入一行字数条件
          
+         radioInsert.forEach(val=>{
+
+         })
+
          // 初始化显示 盘古之白
          noSpace.value = str
          withSpace.value = initValue
          // 点击 空格之神
-         document.querySelector('.space-god').addEventListener('click', ()=>{
+         spaceGod.addEventListener('click', ()=>{
             const str = noSpace.value
             const autoSpace = new AutoSpace();
-            withSpace.value = autoSpace.spacing(str,insert.value,min.value,max.value)
+            withSpace.value = onOff.checked ? autoSpace.spacing(str,insert.value,min.value,max.value,'','')
+                           : autoSpace.spacing(str,'',min.value,max.value,'','')
+         })
+
+         new Array(min,max,insert,onOff,noSpace).forEach((dom)=>{
+            dom.addEventListener('input', ()=>{
+               spaceGod.click()
+            })
          })
       </script>
    </body>

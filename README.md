@@ -1,5 +1,6 @@
 # 改自[https://github.com/zizhengwu/daft-auto-spacing](https://github.com/zizhengwu/daft-auto-spacing)
-=================
+
+he
 ## Api使用说明 
 ```
 const str = '这行应该大约有40个字这行应该大约有40个字这行应该大约有40个字这行应该大约有40个字
@@ -8,7 +9,7 @@ const str = '这行应该大约有40个字这行应该大约有40个字这行应
 In this line有33个字In this line有33个字In this line有33个字啊啊啊'
 
 const autoSpace = new AutoSpace()
-const output = autoSpace.spacing(str,32,48,'##') //参数1传入字符串，2传入最小值，3传入最大值，4传入插入的字符串
+const output = autoSpace.spacing(str,'##',32,48) //参数1传入字符串，2传入替换字符串，3传入最小值，4传入最大值（可以不填）
 console.log(output)
 
 <!-- 这行应该大约有 40 个字这行应该大约有 40 个字##这行应该大约有 40 个字这行应该大约有 40 个字

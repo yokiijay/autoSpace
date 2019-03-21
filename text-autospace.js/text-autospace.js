@@ -11,6 +11,9 @@ function AutoSpace() {
     unicode['zhuyin']['yunmu'] = '[\u311A-\u3126\u312D\u31A4-\u31B3\u31B8-\u31BA]';
     unicode['zhuyin']['yunjiao'] = '[\u31B4-\u31B7]';
     unicode['zhuyin']['diao'] = '[\u02D9\u02CA\u02C5\u02C7\u02CB\u02EA\u02EB]';
+    unicode['shuzi'] = []
+    unicode['shuzi']['quanjiao'] = '[\uff10-\uff19]'
+    unicode['shuzi']['banjiao'] = '[\u0030-\u0039]'
 
     var unicode_set = function(set) {
         var join = (set.match(/[hanzi|latin]/)) ? true : false;
@@ -18,7 +21,7 @@ function AutoSpace() {
         return result;
     };
 
-    this.spacing = (str,insert,min,max)=>{
+    this.spacing = (str,insert,min,max,puncList,biaodianList)=>{
         max = max ? max : Number.POSITIVE_INFINITY
         let hanzi = unicode_set('hanzi');
         let latin = unicode_set('latin') + '|' + unicode['punc'][0];
@@ -26,11 +29,20 @@ function AutoSpace() {
         let patterns = ['/(' + hanzi + ')(' + latin + '|' + punc[1] + ')/ig', '/(' + latin + '|' + punc[2] + ')(' + hanzi + ')/ig'];
         let newStr = ''
 
+        // space-god操作
         patterns.forEach(function(exp) {
             str = str.replace(eval(exp), '$1 $2');
         },
         this);
 
+        // 转半角
+        str = this.enAngelTransfer(this.numAngelTransfer(str))
+        // 去punc
+        str = this.puncBye(str,puncList)
+        // 去标点
+        str = this.biaodianBye(str,biaodianList)
+
+        // 插入insert
         const wrapStr = str.replace(/\n/g,'@wrap@')
         let arrStr = wrapStr.split(/@wrap@/g)
         str = arrStr.map((val,index)=>{
@@ -40,7 +52,7 @@ function AutoSpace() {
                 let strRight = val.substring(strIndex)
                 let newStr = ''
 
-                const ifLetterFirst = new RegExp(`^${unicode['latin'][0]}+`).test(strRight)
+                const ifLetterFirst = new RegExp(`^${unicode['latin'][0]+'[^0-9]'}+`).test(strRight)
                                     || new RegExp(`^${unicode['punc'][0]}+`).test(strRight)
                 if(ifLetterFirst){
                     strRight = strRight.replace(/\s/,`${insert} `)
@@ -53,7 +65,52 @@ function AutoSpace() {
                 return val
             }
         }).join('\n')
-        
+
+        return str
+    }
+
+    // 全角数字转半角方法
+    this.numAngelTransfer = num=>{
+        let quanNum = '０１２３４５６７８９'
+        for(let i=0;i<10;i++){
+            num = num.replace(new RegExp(quanNum.charAt(i),'g'),`${i.toString(16)}`)
+        }
+        return num
+    }
+
+    // 全角英文转半角办法
+    this.enAngelTransfer = en=>{
+        let quanEn = 'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＷＺ'
+        let banEn = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+        for(let i=0;i<quanEn.length;i++){
+            en = en.replace(new RegExp(quanEn.charAt(i),'g'),banEn.charAt(i))
+        }
+        return en
+    }
+
+    // 去punc
+    this.puncBye = (str, list)=>{
+        let punc = /[@&=_\,\.\;\{\}~`\#\|\:?\!\%\^\*\-\+\/\(\['"<‘“\)\]\'">”’]/
+        if(!list){
+            str = str.replace( new RegExp(punc,'g'),'' ).replace( /( )+/g,' ' )
+        }else{
+            for(let i=0;i<list.length;i++){
+                str = str.replace( new RegExp(`\\${list.charAt(i)}`,'g'),'' ).replace( /( )+/g,' ' )
+            }
+        }
+        return str
+    }
+    // 去标点
+    this.biaodianBye = (str, list)=>{
+        let biaodian = /[·・︰、，。：；？！—ー⋯…．·／「『（〔【《〈“‘」』）〕】》〉’”]/
+        if(!list){
+            str = str.replace( new RegExp(biaodian,'g'),' ' )
+        }else{
+            for(let i=0;i<list.length;i++){
+                str = str.replace( new RegExp(`\\${list.charAt(i)}`,'g'),' ' )
+            }
+        }
         return str
     }
 }
