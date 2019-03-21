@@ -423,3 +423,9 @@ Small Device Styles
   }
 
 }
+
+/* yokiijay ⤵️ */
+
+input[type=radio] {
+  font-size: 2em;
+}

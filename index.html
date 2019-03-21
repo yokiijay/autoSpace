@@ -26,7 +26,7 @@
                <div>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每行：
                   <input type="radio" name="insert" value='false' checked> 不插入&nbsp;&nbsp;&nbsp;&nbsp;
-                  <input id="onOff" type="radio" name="insert" value='true' >&nbsp;&nbsp;
+                  <input type="radio" name="insert" value='true' >&nbsp;&nbsp;
                   大于<input size="2" id="min" type="number" value="32" style="display:inline-block;width:60px">
                   且小于<input size="12" id="max" type="number" placeholder="默认不设上限" value="" style="display:inline-block;width:60px">
                   时在该行中间插入字段
@@ -34,15 +34,15 @@
                </div>
                <div>
                   半角符号：
-                  <input type="radio" name="punc" checked> 不清除&nbsp;&nbsp;&nbsp;&nbsp;
-                  <input type="radio" name="punc"> 清除全部&nbsp;&nbsp;&nbsp;&nbsp;
-                  <input type="radio" name="punc"> 清除 <input type="text" placeholder="填入你想清除的符号" style="display:inline-block;width:180px;">
+                  <input type="radio" name="punc" value='false' checked> 不清除&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input type="radio" name="punc" value='true'> 清除全部&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input type="radio" name="punc" value='true' hard='true'> 清除 <input id="puncList" type="text" placeholder="填入你想清除的符号" style="display:inline-block;width:180px;">
                </div>
                <div>
                   全角符号：
-                  <input type="radio" name="biaodian" checked> 不清除&nbsp;&nbsp;&nbsp;&nbsp;
-                  <input type="radio" name="biaodian"> 清除全部&nbsp;&nbsp;&nbsp;&nbsp;
-                  <input type="radio" name="biaodian"> 清除 <input type="text" placeholder="填入你想清除的符号" style="display:inline-block;width:180px;">
+                  <input type="radio" name="biaodian" value='false' checked> 不清除&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input type="radio" name="biaodian" value='true'> 清除全部&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input type="radio" name="biaodian" value='true' hard='true'> 清除 <input id="biaodianList" type="text" placeholder="填入你想清除的符号" style="display:inline-block;width:180px;">
                </div>
                <div class="large-6 medium-6 columns">
                   <div class="row">
@@ -74,38 +74,99 @@
          // 获取 dom
          const noSpace = document.querySelector('.no-space')
          const withSpace = document.querySelector('.with-space')
-         const spaceGod = document.querySelector('.space-god')
+         // const spaceGod = document.querySelector('.space-god') 取消了button
          const min = document.getElementById('min')
          const max = document.getElementById('max')
          const insert = document.getElementById('insert')
-         const onOff = document.getElementById('onOff')
+         const puncList = document.getElementById('puncList')
+         const biaodianList = document.getElementById('biaodianList')
 
          const radioInsert = document.getElementsByName('insert')
          const radioPunc = document.getElementsByName('punc')
          const radioBiaodian = document.getElementsByName('biaodian')
 
-         // 一些常量
-         const str = '这行应该大约有40个字这行应该大约有40个字这行应该大约有40个字这行应该大约有40个字\n本行有35字本行有35字本行有35字本行有35字本行有35字本行有35字本行有35字\n到这一行就只有30个字到这一行就只有30个字到这一行就只有30个字\nIn this line有33个字In this line有33个字In this line有33个字啊啊啊' //初始获取输入的值
-         const autoSpace = new AutoSpace(); //autoSpace对象 
-         const initValue = onOff.checked ? autoSpace.spacing(str,insert.value,min.value,max.value) 
-                        : autoSpace.spacing(str,'',min.value,max.value)  //调用对象方法 参数1传入输入的值 2传入插入的字符串 3传入一行字数条件
+         let initStr = 'first空格blank\n１２３４５６７\nａｂｃｚＡＢＣＺ\n,.,.,....\n，。，。。。' //初始获取输入的值
+         const autoSpace = new AutoSpace()
 
-         // 初始化显示 盘古之白
-         noSpace.value = str
-         withSpace.value = initValue
-         // 点击 空格之神
-         spaceGod.addEventListener('click', ()=>{
-            const str = noSpace.value
-            const autoSpace = new AutoSpace();
-            withSpace.value = onOff.checked ? autoSpace.spacing(str,insert.value,min.value,max.value,'','')
-                           : autoSpace.spacing(str,'',min.value,max.value,'','')
-         })
+         /* str = autoSpace.space(str,true) // str, oneSpace
+         str = autoSpace.numAngelTransfer(str) // str
+         str = autoSpace.enAngelTransfer(str) // str
+         str = autoSpace.puncBye(str) // str, list
+         str = autoSpace.biaodianBye(str,'。，',true) // str, list, boolean
+         str = autoSpace.insert(str, insert.value, min.value, max.value) // str, insert, min, max
+         console.log(str) */
 
-         new Array(min,max,insert,onOff,noSpace).forEach((dom)=>{
+         let str = initStr
+         str = autoSpace.space(str,true) // str, oneSpace
+         str = autoSpace.numAngelTransfer(str) // str
+         str = autoSpace.enAngelTransfer(str) // str
+
+         noSpace.value = initStr
+         withSpace.value = str
+
+         new Array(noSpace, min, max, insert, ...radioInsert, ...radioPunc, ...radioBiaodian, puncList, biaodianList).forEach((dom)=>{
             dom.addEventListener('input', ()=>{
-               spaceGod.click()
+               str = noSpace.value
+               str = autoSpace.space(str,true) // str, oneSpace
+               str = autoSpace.numAngelTransfer(str) // str
+               str = autoSpace.enAngelTransfer(str) // str
+               radioPunc.forEach(dom=>{
+                  if(dom.checked && dom.value=='false')
+                  return // 不处理
+                  if(dom.checked && dom.value=='true'){
+                     if(dom.getAttribute('hard') == 'true' && puncList.value == ''){
+                        return 
+                     }
+                     str = autoSpace.puncBye(str, puncList.value) // str, list
+                  }
+               })
+
+               radioBiaodian.forEach(dom=>{
+                  if(dom.checked && dom.value=='false')
+                  return // 不处理
+                  if(dom.checked && dom.value=='true'){
+                     if(dom.getAttribute('hard') == 'true' && biaodianList.value == ''){
+                        return 
+                     }
+                     str = autoSpace.biaodianBye(str, biaodianList.value, true) // str, list, oneSpace
+                  }
+               })
+
+               radioInsert.forEach(dom=>{
+                  if(dom.checked && dom.value=='false')
+                  return // 不处理
+                  if(dom.checked && dom.value=='true')
+                  str = autoSpace.insert(str, insert.value, min.value, max.value) // str, insert, min, max
+               })
+
+               withSpace.value = str
             })
          })
+
+         // console.log(str)
+
+         // 一些常量
+         // const str = '这行应该大约有40个字这行应该大约有40个字这行应该大约有40个字这行应该大约有40个字\n本行有35字本行有35字本行有35字本行有35字本行有35字本行有35字本行有35字\n到这一行就只有30个字到这一行就只有30个字到这一行就只有30个字\nIn this line有33个字In this line有33个字In this line有33个字啊啊啊' //初始获取输入的值
+         // const autoSpace = new AutoSpace(); //autoSpace对象 
+         // const initValue = onOff.checked ? autoSpace.spacing(str,insert.value,min.value,max.value) 
+         //                : autoSpace.spacing(str,'',min.value,max.value)  //调用对象方法 参数1传入输入的值 2传入插入的字符串 3传入一行字数条件
+
+         // // 初始化显示 盘古之白
+         // noSpace.value = str
+         // withSpace.value = initValue
+         // // 点击 空格之神
+         // spaceGod.addEventListener('click', ()=>{
+         //    const str = noSpace.value
+         //    const autoSpace = new AutoSpace();
+         //    withSpace.value = onOff.checked ? autoSpace.spacing(str,insert.value,min.value,max.value,'','')
+         //                   : autoSpace.spacing(str,'',min.value,max.value,'','')
+         // })
+
+         // new Array(min,max,insert,onOff,noSpace).forEach((dom)=>{
+         //    dom.addEventListener('input', ()=>{
+         //       spaceGod.click()
+         //    })
+         // })
       </script>
    </body>
 </html>
