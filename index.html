@@ -24,7 +24,7 @@
          <section id="main_content" class="inner">
             <div class="row">
                <div>
-                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每行：
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每行：
                   <input type="radio" name="insert" value='false' checked> 不插入&nbsp;&nbsp;&nbsp;&nbsp;
                   <input id="onOff" type="radio" name="insert" value='true' >&nbsp;&nbsp;
                   大于<input size="2" id="min" type="number" value="32" style="display:inline-block;width:60px">
@@ -89,10 +89,6 @@
          const autoSpace = new AutoSpace(); //autoSpace对象 
          const initValue = onOff.checked ? autoSpace.spacing(str,insert.value,min.value,max.value) 
                         : autoSpace.spacing(str,'',min.value,max.value)  //调用对象方法 参数1传入输入的值 2传入插入的字符串 3传入一行字数条件
-         
-         radioInsert.forEach(val=>{
-
-         })
 
          // 初始化显示 盘古之白
          noSpace.value = str

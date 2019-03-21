@@ -27,7 +27,7 @@ function AutoSpace() {
         let latin = unicode_set('latin') + '|' + unicode['punc'][0];
         let punc = unicode['punc'];
         let patterns = ['/(' + hanzi + ')(' + latin + '|' + punc[1] + ')/ig', '/(' + latin + '|' + punc[2] + ')(' + hanzi + ')/ig'];
-        let newStr = ''
+
 
         // space-god操作
         patterns.forEach(function(exp) {
@@ -42,7 +42,13 @@ function AutoSpace() {
         // 去标点
         str = this.biaodianBye(str,biaodianList)
 
-        // 插入insert
+        // 插入insert 
+            /* 
+                1. 判断字数
+                2. 字数>min 切割成两半 : 字数<min 不作处理
+                3. 取右边那半 判断第一个单词是否是Latin (排除数字)
+                4. 是Latin 第一个空格处插入insert字段 : 不是Latin 在开头插入insert字段
+            */
         const wrapStr = str.replace(/\n/g,'@wrap@')
         let arrStr = wrapStr.split(/@wrap@/g)
         str = arrStr.map((val,index)=>{
