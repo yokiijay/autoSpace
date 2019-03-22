@@ -2,7 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
    <head>
       <script type="text/javascript" src="text-autospace.js/text-autospace.js"></script>
-      <script type="text/javascript" src="text-autospace.js/cookie.js"></script>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
       <meta name="description" content="为什么我就是能这样娴熟地加上空格呢？">
       <title>为什么我就是能这样娴熟地加上空格呢？</title>
@@ -26,8 +25,8 @@
             <div class="row">
                <div>
                   每行：
-                  <input type="radio" name="insert" value='false' checked> 不插入&nbsp;&nbsp;&nbsp;&nbsp;
-                  <input type="radio" name="insert" value='true' >&nbsp;&nbsp;
+                  <input id="insert1" type="radio" name="insert" value='false' checked> 不插入&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input id="insert2" type="radio" name="insert" value='true' >&nbsp;&nbsp;
                   大于<input size="2" id="min" type="number" value="32" style="display:inline-block;width:60px">
                   且小于<input size="12" id="max" type="number" placeholder="默认不设上限" value="" style="display:inline-block;width:60px">
                   时在该行中间插入字段
@@ -35,9 +34,9 @@
                </div>
                <div>
                   符号：
-                  <input type="radio" name="punc" value='false' checked> 不清除&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input id="punc1" type="radio" name="punc" value='false' checked> 不清除&nbsp;&nbsp;&nbsp;&nbsp;
                   <!-- <input type="radio" name="punc" value='true'> 清除全部&nbsp;&nbsp;&nbsp;&nbsp; -->
-                  <input type="radio" name="punc" value='true' hard='true'> 清除 <input id="puncList" type="text" placeholder="填入你想清除的符号" style="display:inline-block;width:180px;">
+                  <input id="punc2" type="radio" name="punc" value='true' hard='true'> 清除 <input id="puncList" type="text" placeholder="填入你想清除的符号" style="display:inline-block;width:180px;">
                </div>
                <!-- <div>
                   全角符号：
@@ -75,28 +74,20 @@
          // 获取 dom
          const noSpace = document.querySelector('.no-space')
          const withSpace = document.querySelector('.with-space')
-         // const spaceGod = document.querySelector('.space-god') 取消了button
+
          const min = document.getElementById('min')
          const max = document.getElementById('max')
          const insert = document.getElementById('insert')
          const puncList = document.getElementById('puncList')
-         // const biaodianList = document.getElementById('biaodianList')
 
          const radioInsert = document.getElementsByName('insert')
          const radioPunc = document.getElementsByName('punc')
-         // const radioBiaodian = document.getElementsByName('biaodian')
 
-         let initStr = 'first空格blank\n１２３４５６７\nａｂｃｚＡＢＣＺ\n,.,.,....\n，。，。。。' //初始获取输入的值
+         // 初始化str和no-space
+         let initStr = localStorage.getItem('nospace') ? localStorage.getItem('nospace') : 'first空格blank\n１２３４５６７\nａｂｃｚＡＢＣＺ\n,.,.,....\n，。，。。。' //初始获取输入的值
          const autoSpace = new AutoSpace()
 
-         /* str = autoSpace.space(str,true) // str, oneSpace
-         str = autoSpace.numAngelTransfer(str) // str
-         str = autoSpace.enAngelTransfer(str) // str
-         str = autoSpace.puncBye(str) // str, list
-         str = autoSpace.biaodianBye(str,'。，',true) // str, list, boolean
-         str = autoSpace.insert(str, insert.value, min.value, max.value) // str, insert, min, max
-         console.log(str) */
-
+         //初始化处理一遍
          let str = initStr
          str = autoSpace.space(str,true) // str, oneSpace
          str = autoSpace.numAngelTransfer(str) // str
@@ -107,12 +98,15 @@
          puncList.value = autoSpace.puncDetect(str)+autoSpace.biaodianDetect(str)
          puncList.disabled = true
 
-         new Array(noSpace, min, max, insert, ...radioInsert, ...radioPunc/* , ...radioBiaodian */, puncList/* , biaodianList */).forEach((dom)=>{
+         // 监听input变化 处理
+         new Array(noSpace, min, max, insert, ...radioInsert, ...radioPunc, puncList).forEach((dom)=>{
             dom.addEventListener('input', ()=>{
+
                str = noSpace.value
                str = autoSpace.space(str,true) // str, oneSpace
                str = autoSpace.numAngelTransfer(str) // str
                str = autoSpace.enAngelTransfer(str) // str
+
                radioPunc.forEach(dom=>{
                   if(dom.checked && dom.value=='false'){
                      puncList.value = autoSpace.puncDetect(str)+autoSpace.biaodianDetect(str)
@@ -128,17 +122,6 @@
                   }
                })
 
-               // radioBiaodian.forEach(dom=>{
-               //    if(dom.checked && dom.value=='false')
-               //    return // 不处理
-               //    if(dom.checked && dom.value=='true'){
-               //       if(dom.getAttribute('hard') == 'true' && biaodianList.value == ''){
-               //          return 
-               //       }
-               //       str = autoSpace.biaodianBye(str, biaodianList.value, true) // str, list, oneSpace
-               //    }
-               // })
-
                radioInsert.forEach(dom=>{
                   if(dom.checked && dom.value=='false')
                   return // 不处理
@@ -147,33 +130,17 @@
                })
 
                withSpace.value = str
+
+               /* localStorage 保存离线数据 */ /* 控制台输入 localStorage.clear() 可清空复原 */
+               localStorage.setItem('nospace', noSpace.value)
+               radioInsert.forEach(dom=>{
+                  if(dom.checked && dom.value=='true')
+                     localStorage.setItem('insertChecked', dom.id)
+                     /* 继续 👇 */
+               })
+               console.log( localStorage )
             })
          })
-
-         // console.log(str)
-
-         // 一些常量
-         // const str = '这行应该大约有40个字这行应该大约有40个字这行应该大约有40个字这行应该大约有40个字\n本行有35字本行有35字本行有35字本行有35字本行有35字本行有35字本行有35字\n到这一行就只有30个字到这一行就只有30个字到这一行就只有30个字\nIn this line有33个字In this line有33个字In this line有33个字啊啊啊' //初始获取输入的值
-         // const autoSpace = new AutoSpace(); //autoSpace对象 
-         // const initValue = onOff.checked ? autoSpace.spacing(str,insert.value,min.value,max.value) 
-         //                : autoSpace.spacing(str,'',min.value,max.value)  //调用对象方法 参数1传入输入的值 2传入插入的字符串 3传入一行字数条件
-
-         // // 初始化显示 盘古之白
-         // noSpace.value = str
-         // withSpace.value = initValue
-         // // 点击 空格之神
-         // spaceGod.addEventListener('click', ()=>{
-         //    const str = noSpace.value
-         //    const autoSpace = new AutoSpace();
-         //    withSpace.value = onOff.checked ? autoSpace.spacing(str,insert.value,min.value,max.value,'','')
-         //                   : autoSpace.spacing(str,'',min.value,max.value,'','')
-         // })
-
-         // new Array(min,max,insert,onOff,noSpace).forEach((dom)=>{
-         //    dom.addEventListener('input', ()=>{
-         //       spaceGod.click()
-         //    })
-         // })
       </script>
    </body>
 </html>

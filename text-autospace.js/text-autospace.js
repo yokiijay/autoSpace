@@ -75,9 +75,9 @@ function AutoSpace() {
     this.puncDetect = (str)=>{
         let punc = /[@&=_\,\.\;\{\}~`\#\|\:?\!\%\^\*\-\+\/\(\['"<‘“\)\]\'">”’\\]/
         str = str.match( new RegExp(punc,'g') )
-        str = str.filter((val,index,arr)=>(
-            arr.indexOf(val) === index // [a,a,a] 
-        ))
+        str = str ? str.filter((val,index,arr)=>(
+            arr.indexOf(val) === index
+        )) : str
         str = str ? str.join('') : str
         return str
     }
@@ -103,9 +103,9 @@ function AutoSpace() {
     this.biaodianDetect = (str)=>{
         let biaodian = /[·・︰、，。：；？！—ー⋯…．·／「『（〔【《〈“‘」』）〕】》〉’”]/
         str = str.match( new RegExp(biaodian,'g') )
-        str = str.filter((val,index,arr)=>(
+        str = str ? str.filter((val,index,arr)=>(
             arr.indexOf(val) === index
-        ))
+        )) : str
         str = str ? str.join('') : str
         return str
     }
