@@ -60,7 +60,7 @@ function AutoSpace() {
 
     // 去punc
     this.puncBye = (str, list)=>{
-        let punc = /[@&=_\,\.\;\{\}~`\#\|\:?\!\%\^\*\-\+\/\(\['"<‘“\)\]\'">”’]/
+        let punc = /[@&=_\,\.\;\{\}~`\#\|\:?\!\%\^\*\-\+\/\(\['"<‘“\)\]\'">”’\\]/
         if(!list){
             str = str.replace( new RegExp(punc,'g'),'' )/* .replace( /( )+/g,' ' ) */
         }else{
@@ -68,6 +68,17 @@ function AutoSpace() {
                 str = str.replace( new RegExp(`\\${list.charAt(i)}`,'g'),'' )/* .replace( /( )+/g,' ' ) */
             }
         }
+        return str
+    }
+
+    // 获取punc
+    this.puncDetect = (str)=>{
+        let punc = /[@&=_\,\.\;\{\}~`\#\|\:?\!\%\^\*\-\+\/\(\['"<‘“\)\]\'">”’\\]/
+        str = str.match( new RegExp(punc,'g') )
+        str = str.filter((val,index,arr)=>(
+            arr.indexOf(val) === index // [a,a,a] 
+        ))
+        str = str ? str.join('') : str
         return str
     }
 
@@ -85,6 +96,17 @@ function AutoSpace() {
                 }
             }
         }
+        return str
+    }
+    
+    // 获取biaodian
+    this.biaodianDetect = (str)=>{
+        let biaodian = /[·・︰、，。：；？！—ー⋯…．·／「『（〔【《〈“‘」』）〕】》〉’”]/
+        str = str.match( new RegExp(biaodian,'g') )
+        str = str.filter((val,index,arr)=>(
+            arr.indexOf(val) === index
+        ))
+        str = str ? str.join('') : str
         return str
     }
 
@@ -108,9 +130,10 @@ function AutoSpace() {
                 let newStr = ''
 
                 const ifLetterFirst = new RegExp(`^${unicode['latin'][0]+'[^0-9]'}+`).test(strRight)
-                                    || new RegExp(`^${unicode['punc'][0]}+`).test(strRight)
+                || new RegExp( /^[@&=_\,\.\;\{\}~`\#\|\:?\!\%\^\*\-\+\/\(\['"<‘“\)\]\'">”’]/, 'g' ).test(strRight)
+                || new RegExp( /[·・︰、，。：；？！—ー⋯…．·／「『（〔【《〈“‘」』）〕】》〉’”]+/, 'g' ).test(strRight)
                 if(ifLetterFirst){
-                    strRight = strRight.replace(/\s/,`${insert} `)
+                    strRight = strRight.replace(/(\w+)?([@&=_\,\.\;\{\}~`\#\|\:?\!\%\^\*\-\+\/\(\['"<‘“\)\]\'">”’·・︰、，。：；？！—ー⋯…．·／「『（〔【《〈“‘」』）〕】》〉’”]?)/,`$1$2${insert} `)
                 }else{
                     strRight = insert+strRight
                 }

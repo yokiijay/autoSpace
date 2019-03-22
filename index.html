@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
    <head>
       <script type="text/javascript" src="text-autospace.js/text-autospace.js"></script>
+      <script type="text/javascript" src="text-autospace.js/cookie.js"></script>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
       <meta name="description" content="为什么我就是能这样娴熟地加上空格呢？">
       <title>为什么我就是能这样娴熟地加上空格呢？</title>
@@ -24,7 +25,7 @@
          <section id="main_content" class="inner">
             <div class="row">
                <div>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每行：
+                  每行：
                   <input type="radio" name="insert" value='false' checked> 不插入&nbsp;&nbsp;&nbsp;&nbsp;
                   <input type="radio" name="insert" value='true' >&nbsp;&nbsp;
                   大于<input size="2" id="min" type="number" value="32" style="display:inline-block;width:60px">
@@ -33,17 +34,17 @@
                   <input id="insert" type="text" value="##" style="display:inline-block;width:40px">
                </div>
                <div>
-                  半角符号：
+                  符号：
                   <input type="radio" name="punc" value='false' checked> 不清除&nbsp;&nbsp;&nbsp;&nbsp;
-                  <input type="radio" name="punc" value='true'> 清除全部&nbsp;&nbsp;&nbsp;&nbsp;
+                  <!-- <input type="radio" name="punc" value='true'> 清除全部&nbsp;&nbsp;&nbsp;&nbsp; -->
                   <input type="radio" name="punc" value='true' hard='true'> 清除 <input id="puncList" type="text" placeholder="填入你想清除的符号" style="display:inline-block;width:180px;">
                </div>
-               <div>
+               <!-- <div>
                   全角符号：
                   <input type="radio" name="biaodian" value='false' checked> 不清除&nbsp;&nbsp;&nbsp;&nbsp;
                   <input type="radio" name="biaodian" value='true'> 清除全部&nbsp;&nbsp;&nbsp;&nbsp;
                   <input type="radio" name="biaodian" value='true' hard='true'> 清除 <input id="biaodianList" type="text" placeholder="填入你想清除的符号" style="display:inline-block;width:180px;">
-               </div>
+               </div> -->
                <div class="large-6 medium-6 columns">
                   <div class="row">
                      <div class="large-12 columns">
@@ -79,11 +80,11 @@
          const max = document.getElementById('max')
          const insert = document.getElementById('insert')
          const puncList = document.getElementById('puncList')
-         const biaodianList = document.getElementById('biaodianList')
+         // const biaodianList = document.getElementById('biaodianList')
 
          const radioInsert = document.getElementsByName('insert')
          const radioPunc = document.getElementsByName('punc')
-         const radioBiaodian = document.getElementsByName('biaodian')
+         // const radioBiaodian = document.getElementsByName('biaodian')
 
          let initStr = 'first空格blank\n１２３４５６７\nａｂｃｚＡＢＣＺ\n,.,.,....\n，。，。。。' //初始获取输入的值
          const autoSpace = new AutoSpace()
@@ -103,34 +104,40 @@
 
          noSpace.value = initStr
          withSpace.value = str
+         puncList.value = autoSpace.puncDetect(str)+autoSpace.biaodianDetect(str)
+         puncList.disabled = true
 
-         new Array(noSpace, min, max, insert, ...radioInsert, ...radioPunc, ...radioBiaodian, puncList, biaodianList).forEach((dom)=>{
+         new Array(noSpace, min, max, insert, ...radioInsert, ...radioPunc/* , ...radioBiaodian */, puncList/* , biaodianList */).forEach((dom)=>{
             dom.addEventListener('input', ()=>{
                str = noSpace.value
                str = autoSpace.space(str,true) // str, oneSpace
                str = autoSpace.numAngelTransfer(str) // str
                str = autoSpace.enAngelTransfer(str) // str
                radioPunc.forEach(dom=>{
-                  if(dom.checked && dom.value=='false')
-                  return // 不处理
+                  if(dom.checked && dom.value=='false'){
+                     puncList.value = autoSpace.puncDetect(str)+autoSpace.biaodianDetect(str)
+                     puncList.disabled = true
+                     return // 不处理
+                  }
                   if(dom.checked && dom.value=='true'){
                      if(dom.getAttribute('hard') == 'true' && puncList.value == ''){
                         return 
                      }
+                     puncList.disabled = false
                      str = autoSpace.puncBye(str, puncList.value) // str, list
                   }
                })
 
-               radioBiaodian.forEach(dom=>{
-                  if(dom.checked && dom.value=='false')
-                  return // 不处理
-                  if(dom.checked && dom.value=='true'){
-                     if(dom.getAttribute('hard') == 'true' && biaodianList.value == ''){
-                        return 
-                     }
-                     str = autoSpace.biaodianBye(str, biaodianList.value, true) // str, list, oneSpace
-                  }
-               })
+               // radioBiaodian.forEach(dom=>{
+               //    if(dom.checked && dom.value=='false')
+               //    return // 不处理
+               //    if(dom.checked && dom.value=='true'){
+               //       if(dom.getAttribute('hard') == 'true' && biaodianList.value == ''){
+               //          return 
+               //       }
+               //       str = autoSpace.biaodianBye(str, biaodianList.value, true) // str, list, oneSpace
+               //    }
+               // })
 
                radioInsert.forEach(dom=>{
                   if(dom.checked && dom.value=='false')
