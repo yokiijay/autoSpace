@@ -78,7 +78,7 @@ function AutoSpace() {
         str = str ? str.filter((val,index,arr)=>(
             arr.indexOf(val) === index
         )) : str
-        str = str ? str.join('') : str
+        str = str ? str.join('') : ''
         return str
     }
 
@@ -106,7 +106,7 @@ function AutoSpace() {
         str = str ? str.filter((val,index,arr)=>(
             arr.indexOf(val) === index
         )) : str
-        str = str ? str.join('') : str
+        str = str ? str.join('') : ''
         return str
     }
 

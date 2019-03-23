@@ -7,15 +7,20 @@
       <title>为什么我就是能这样娴熟地加上空格呢？</title>
       <link type="text/css" rel="stylesheet" href="stylesheets/theme.css" />
       <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+      <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1104382_sihsmxcsw.css">
       <meta http-equiv="x-dns-prefetch-control" content="off"/>
-
    </head>
    <body>
       <!-- HEADER -->
       <div id="header_wrap" class="outer">
          <header class="inner">
             <a id="forkme_banner" href="https://github.com/yokiijay/autoSpace">View on GitHub</a>
-            <h1 id="project_title">为什么我就是能这样娴熟地加上空格呢？</h1>
+            <h1 id="project_title">
+               <i class="iconfont icon-fonticons" style="
+                  font-size: 2em;
+                  color: moccasin;
+               "></i>
+                  Fix your bad typography <span style="color: moccasin;">V1.0</span></h1>
             <h2 id="project_tagline"></h2>
          </header>
       </div>
@@ -25,10 +30,10 @@
             <div class="row">
                <div>
                   每行：
-                  <input id="insert1" type="radio" name="insert" value='false' checked> 不插入&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input id="insert1" type="radio" name="insert" value='false'> 不插入&nbsp;&nbsp;&nbsp;&nbsp;
                   <input id="insert2" type="radio" name="insert" value='true' >&nbsp;&nbsp;
                   大于<input size="2" id="min" type="number" value="32" style="display:inline-block;width:60px">
-                  且小于<input size="12" id="max" type="number" placeholder="默认不设上限" value="" style="display:inline-block;width:60px">
+                  且小于<input size="12" id="max" type="number" placeholder="不限" value="" style="display:inline-block;width:60px">
                   时在该行中间插入字段
                   <input id="insert" type="text" value="##" style="display:inline-block;width:40px">
                </div>
@@ -65,7 +70,7 @@
       <!-- FOOTER  -->
       <div id="footer_wrap" class="outer">
          <footer class="inner">
-            <p class="copyright">为什么我就是能这样娴熟地加上空格呢？ maintained by <a href="https://github.com/zizhengwu">Zizheng Wu</a> modified by <a href="https://github.com/yokiijay">Yokiijay</a> </p>
+            <p class="copyright">Inspired with <u>为什么我就是能这样娴熟地加上空格呢？</u> maintained by <a href="https://github.com/zizhengwu">Zizheng Wu</a> modified by <a href="https://github.com/yokiijay">Yokiijay</a> </p>
             <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
          </footer>
       </div>
@@ -83,6 +88,8 @@
          const radioInsert = document.getElementsByName('insert')
          const radioPunc = document.getElementsByName('punc')
 
+         const insertCheck = document.getElementById( localStorage.getItem('insertChecked')||'insert1' )
+
          // 初始化str和no-space
          let initStr = localStorage.getItem('nospace') ? localStorage.getItem('nospace') : 'first空格blank\n１２３４５６７\nａｂｃｚＡＢＣＺ\n,.,.,....\n，。，。。。' //初始获取输入的值
          const autoSpace = new AutoSpace()
@@ -92,6 +99,17 @@
          str = autoSpace.space(str,true) // str, oneSpace
          str = autoSpace.numAngelTransfer(str) // str
          str = autoSpace.enAngelTransfer(str) // str
+         /* 获取离线数据并填入表单 */
+         min.value = localStorage.getItem('insertMin') || '32'
+         max.value = localStorage.getItem('insertMax') || ''
+         insert.value = localStorage.getItem('insertInsert') || '##'
+         insertCheck.checked = true
+         radioInsert.forEach(dom=>{
+            if(dom.checked && dom.value=='false')
+            return // 不处理
+            if(dom.checked && dom.value=='true')
+            str = autoSpace.insert(str, insert.value, min.value, max.value) // str, insert, min, max
+         })
 
          noSpace.value = initStr
          withSpace.value = str
@@ -134,10 +152,13 @@
                /* localStorage 保存离线数据 */ /* 控制台输入 localStorage.clear() 可清空复原 */
                localStorage.setItem('nospace', noSpace.value)
                radioInsert.forEach(dom=>{
-                  if(dom.checked && dom.value=='true')
+                  if(dom.checked){
                      localStorage.setItem('insertChecked', dom.id)
-                     /* 继续 👇 */
+                  }
                })
+               localStorage.setItem('insertMin', min.value)
+               localStorage.setItem('insertMax', max.value)
+               localStorage.setItem('insertInsert', insert.value)
                console.log( localStorage )
             })
          })
