@@ -356,9 +356,9 @@ Full-Width Styles
 }
 
 #main_content_wrap {
-  background: #f2f2f2;
+  /* background: #f2f2f2;
   border-top: 1px solid #111;
-  border-bottom: 1px solid #111;
+  border-bottom: 1px solid #111; */
 }
 
 #main_content {
@@ -390,7 +390,7 @@ Small Device Styles
   }
 
   #project_title {
-  font-size: 32px;
+  font-size: 28px;
   }
 
   h1 {
@@ -429,4 +429,37 @@ Small Device Styles
 
 input[type=radio] {
   font-size: 2em;
+}
+
+.with-space {
+  background: rgb(44, 41, 71);
+  color: white;
+}
+.with-space::selection {
+  background: rgb(44, 41, 71);
+}
+
+.fix {
+  width: 700px;
+  height: 70px;
+  background: #212121;
+  margin: 0 auto;
+  border-radius: 6px;
+  line-height: 70px;
+}
+
+input[type=text],input[type=number] {
+  border-radius: 4px;
+  background: none;
+  color: white;
+  margin: 10px 10px;
+}
+
+textarea {
+  border-radius: 4px;
+}
+
+input[type=text]:disabled {
+  background: none;
+  border-color: #373737;
 }

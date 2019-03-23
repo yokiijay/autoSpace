@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
    <head>
+      <script src="https://cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
       <script type="text/javascript" src="text-autospace.js/text-autospace.js"></script>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
       <meta name="description" content="为什么我就是能这样娴熟地加上空格呢？">
       <title>为什么我就是能这样娴熟地加上空格呢？</title>
       <link type="text/css" rel="stylesheet" href="stylesheets/theme.css" />
       <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-      <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1104382_sihsmxcsw.css">
+      <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_1104382_sihsmxcsw.css">
       <meta http-equiv="x-dns-prefetch-control" content="off"/>
    </head>
    <body>
@@ -15,12 +16,17 @@
       <div id="header_wrap" class="outer">
          <header class="inner">
             <a id="forkme_banner" href="https://github.com/yokiijay/autoSpace">View on GitHub</a>
-            <h1 id="project_title">
+            <h1 id="project_title" style="text-align: center;font-size: 34px">
                <i class="iconfont icon-fonticons" style="
                   font-size: 2em;
                   color: moccasin;
                "></i>
-                  Fix your bad typography <span style="color: moccasin;">V1.0</span></h1>
+                  <span style="color: moccasin;">V1.0</span>
+                  <div class="fix" style="margin-bottom: 20px;">
+                        <span id="fix2"></span>
+                  </div>
+                  <!-- <span id="fix"></span><br> -->
+               </h1>
             <h2 id="project_tagline"></h2>
          </header>
       </div>
@@ -28,7 +34,7 @@
       <div id="main_content_wrap" class="outer">
          <section id="main_content" class="inner">
             <div class="row">
-               <div>
+               <div style="color: white;">
                   每行：
                   <input id="insert1" type="radio" name="insert" value='false'> 不插入&nbsp;&nbsp;&nbsp;&nbsp;
                   <input id="insert2" type="radio" name="insert" value='true' >&nbsp;&nbsp;
@@ -37,7 +43,7 @@
                   时在该行中间插入字段
                   <input id="insert" type="text" value="##" style="display:inline-block;width:40px">
                </div>
-               <div>
+               <div style="color: white;">
                   符号：
                   <input id="punc1" type="radio" name="punc" value='false' checked> 不清除&nbsp;&nbsp;&nbsp;&nbsp;
                   <!-- <input type="radio" name="punc" value='true'> 清除全部&nbsp;&nbsp;&nbsp;&nbsp; -->
@@ -52,7 +58,7 @@
                <div class="large-6 medium-6 columns">
                   <div class="row">
                      <div class="large-12 columns">
-                        <label for="post">一些文字</label>
+                        <label for="post" style="color: white;">一些文字</label>
                            <textarea name="content" class="no-space" rows="15"  wrap="hard" style="font-size: 12pt"></textarea>
                      </div>
                      <div class="large-12 columns">
@@ -61,7 +67,7 @@
                   </div>
                </div>
                <div class="large-6 medium-6 columns">
-                  <label for="new_post">盘古之白</label>
+                  <label for="new_post" style="color: white;">转好了</label>
                   <textarea onmouseover="this.select()" class="with-space" rows="15" style="font-size: 12pt" readonly></textarea>
                </div>
             </div>
@@ -74,93 +80,24 @@
             <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
          </footer>
       </div>
-
+      <script src='index.js'></script>
       <script>
-         // 获取 dom
-         const noSpace = document.querySelector('.no-space')
-         const withSpace = document.querySelector('.with-space')
 
-         const min = document.getElementById('min')
-         const max = document.getElementById('max')
-         const insert = document.getElementById('insert')
-         const puncList = document.getElementById('puncList')
-
-         const radioInsert = document.getElementsByName('insert')
-         const radioPunc = document.getElementsByName('punc')
-
-         const insertCheck = document.getElementById( localStorage.getItem('insertChecked')||'insert1' )
-
-         // 初始化str和no-space
-         let initStr = localStorage.getItem('nospace') ? localStorage.getItem('nospace') : 'first空格blank\n１２３４５６７\nａｂｃｚＡＢＣＺ\n,.,.,....\n，。，。。。' //初始获取输入的值
-         const autoSpace = new AutoSpace()
-
-         //初始化处理一遍
-         let str = initStr
-         str = autoSpace.space(str,true) // str, oneSpace
-         str = autoSpace.numAngelTransfer(str) // str
-         str = autoSpace.enAngelTransfer(str) // str
-         /* 获取离线数据并填入表单 */
-         min.value = localStorage.getItem('insertMin') || '32'
-         max.value = localStorage.getItem('insertMax') || ''
-         insert.value = localStorage.getItem('insertInsert') || '##'
-         insertCheck.checked = true
-         radioInsert.forEach(dom=>{
-            if(dom.checked && dom.value=='false')
-            return // 不处理
-            if(dom.checked && dom.value=='true')
-            str = autoSpace.insert(str, insert.value, min.value, max.value) // str, insert, min, max
-         })
-
-         noSpace.value = initStr
-         withSpace.value = str
-         puncList.value = autoSpace.puncDetect(str)+autoSpace.biaodianDetect(str)
-         puncList.disabled = true
-
-         // 监听input变化 处理
-         new Array(noSpace, min, max, insert, ...radioInsert, ...radioPunc, puncList).forEach((dom)=>{
-            dom.addEventListener('input', ()=>{
-
-               str = noSpace.value
-               str = autoSpace.space(str,true) // str, oneSpace
-               str = autoSpace.numAngelTransfer(str) // str
-               str = autoSpace.enAngelTransfer(str) // str
-
-               radioPunc.forEach(dom=>{
-                  if(dom.checked && dom.value=='false'){
-                     puncList.value = autoSpace.puncDetect(str)+autoSpace.biaodianDetect(str)
-                     puncList.disabled = true
-                     return // 不处理
-                  }
-                  if(dom.checked && dom.value=='true'){
-                     if(dom.getAttribute('hard') == 'true' && puncList.value == ''){
-                        return 
-                     }
-                     puncList.disabled = false
-                     str = autoSpace.puncBye(str, puncList.value) // str, list
-                  }
-               })
-
-               radioInsert.forEach(dom=>{
-                  if(dom.checked && dom.value=='false')
-                  return // 不处理
-                  if(dom.checked && dom.value=='true')
-                  str = autoSpace.insert(str, insert.value, min.value, max.value) // str, insert, min, max
-               })
-
-               withSpace.value = str
-
-               /* localStorage 保存离线数据 */ /* 控制台输入 localStorage.clear() 可清空复原 */
-               localStorage.setItem('nospace', noSpace.value)
-               radioInsert.forEach(dom=>{
-                  if(dom.checked){
-                     localStorage.setItem('insertChecked', dom.id)
-                  }
-               })
-               localStorage.setItem('insertMin', min.value)
-               localStorage.setItem('insertMax', max.value)
-               localStorage.setItem('insertInsert', insert.value)
-               console.log( localStorage )
-            })
+         // var typed = new Typed('#fix', {
+         //    strings: ['Fix your bad ...! typography', 'Fix your bad typography', 'Fix your bad ## typography'],
+         //    typeSpeed: 60,
+         //    backSpeed: 30,
+         //    smartBackspace: true,
+         //    loop: true,
+         //    loopCount: Infinity
+         // })
+         var typed = new Typed('#fix2', {
+            strings: ['为什么我就是能easily加上!!空格呢', '为什么我就是能 easily 加上空格呢', '为什么我就是能 easily## 加上空格呢^2000?'],
+            typeSpeed: 60,
+            backSpeed: 30,
+            smartBackspace: true,
+            loop: true,
+            loopCount: Infinity
          })
       </script>
    </body>
