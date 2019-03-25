@@ -68,7 +68,7 @@
                </div>
                <div class="large-6 medium-6 columns">
                   <label for="new_post" style="color: white;">转好了</label>
-                  <textarea onmouseover="this.select()" class="with-space" rows="15" style="font-size: 12pt" readonly></textarea>
+                  <textarea onclick="this.select();document.execCommand('Copy');alert('已复制')" class="with-space" rows="15" style="font-size: 12pt;cursor: pointer;" readonly></textarea>
                </div>
             </div>
          </section>
