@@ -73,7 +73,7 @@ function AutoSpace() {
 
     // 获取punc
     this.puncDetect = (str)=>{
-        let punc = /[@&=_\,\.\;\{\}~`\#\|\:?\!\%\^\*\-\+\/\(\['"<‘“\)\]\'">”’\\]/
+        let punc = /[@&=_\,\.\;\{\}~`\#\|\:?\!\%\^\*\-\+\/\(\['"<‘\)\]\'">’\\]/
         str = str.match( new RegExp(punc,'g') )
         str = str ? str.filter((val,index,arr)=>(
             arr.indexOf(val) === index

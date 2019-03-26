@@ -64,13 +64,9 @@ new Array(noSpace, min, max, insert, ...radioInsert, ...radioPunc, puncList, rep
 						){
 							 return 
 						}
-						if(dom.getAttribute('hard')){
-							puncList.disabled = false
-							str = autoSpace.puncBye(str, puncList.value)} // str, list
-						if(dom.getAttribute('replace')){
-							replaceList.disabled = false
-							puncList.disabled = false
-							str = autoSpace.puncBye(str, puncList.value, replaceList.value)} // str, list
+						puncList.disabled = false
+						replaceList.disabled = false
+						str = autoSpace.puncBye(str, puncList.value, replaceList.value) // str, list
 				 }
 			})
 
