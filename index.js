@@ -69,6 +69,7 @@ new Array(noSpace, min, max, insert, ...radioInsert, ...radioPunc, puncList, rep
 							str = autoSpace.puncBye(str, puncList.value)} // str, list
 						if(dom.getAttribute('replace')){
 							replaceList.disabled = false
+							puncList.disabled = false
 							str = autoSpace.puncBye(str, puncList.value, replaceList.value)} // str, list
 				 }
 			})
