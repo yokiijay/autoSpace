@@ -59,13 +59,13 @@ function AutoSpace() {
     }
 
     // 去punc
-    this.puncBye = (str, list)=>{
+    this.puncBye = (str, list, replace)=>{
         let punc = /[@&=_\,\.\;\{\}~`\#\|\:?\!\%\^\*\-\+\/\(\['"<‘“\)\]\'">”’\\]/
         if(!list){
-            str = str.replace( new RegExp(punc,'g'),'' )/* .replace( /( )+/g,' ' ) */
+            str = str.replace( new RegExp(punc,'g'), replace||'' )/* .replace( /( )+/g,' ' ) */
         }else{
             for(let i=0;i<list.length;i++){
-                str = str.replace( new RegExp(`\\${list.charAt(i)}`,'g'),'' )/* .replace( /( )+/g,' ' ) */
+                str = str.replace( new RegExp(`\\${list.charAt(i)}`,'g'), replace||'' )/* .replace( /( )+/g,' ' ) */
             }
         }
         return str

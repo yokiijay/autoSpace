@@ -6,6 +6,7 @@ const min = document.getElementById('min')
 const max = document.getElementById('max')
 const insert = document.getElementById('insert')
 const puncList = document.getElementById('puncList')
+const replaceList = document.getElementById('replace')
 
 const radioInsert = document.getElementsByName('insert')
 const radioPunc = document.getElementsByName('punc')
@@ -37,9 +38,10 @@ noSpace.value = initStr
 withSpace.value = str
 puncList.value = autoSpace.puncDetect(str)+autoSpace.biaodianDetect(str)
 puncList.disabled = true
+replaceList.disabled = true
 
 // 监听input变化 处理
-new Array(noSpace, min, max, insert, ...radioInsert, ...radioPunc, puncList).forEach((dom)=>{
+new Array(noSpace, min, max, insert, ...radioInsert, ...radioPunc, puncList, replaceList).forEach((dom)=>{
 	 dom.addEventListener('input', ()=>{
 
 			str = noSpace.value
@@ -51,14 +53,23 @@ new Array(noSpace, min, max, insert, ...radioInsert, ...radioPunc, puncList).for
 				 if(dom.checked && dom.value=='false'){
 						puncList.value = autoSpace.puncDetect(str)+autoSpace.biaodianDetect(str)
 						puncList.disabled = true
+						replaceList.disabled = true
 						return // 不处理
 				 }
 				 if(dom.checked && dom.value=='true'){
-						if(dom.getAttribute('hard') == 'true' && puncList.value == ''){
+						if(
+							(dom.getAttribute('hard') == 'true' && puncList.value == '')
+							||
+							(dom.getAttribute('replace') == 'true' && puncList.value == '')
+						){
 							 return 
 						}
-						puncList.disabled = false
-						str = autoSpace.puncBye(str, puncList.value) // str, list
+						if(dom.getAttribute('hard')){
+							puncList.disabled = false
+							str = autoSpace.puncBye(str, puncList.value)} // str, list
+						if(dom.getAttribute('replace')){
+							replaceList.disabled = false
+							str = autoSpace.puncBye(str, puncList.value, replaceList.value)} // str, list
 				 }
 			})
 
@@ -81,6 +92,6 @@ new Array(noSpace, min, max, insert, ...radioInsert, ...radioPunc, puncList).for
 			localStorage.setItem('insertMin', min.value)
 			localStorage.setItem('insertMax', max.value)
 			localStorage.setItem('insertInsert', insert.value)
-			console.log( localStorage )
+			// console.log( localStorage )
 	 })
 })
