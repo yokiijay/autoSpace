@@ -102,8 +102,8 @@ const clipboard = new ClipboardJS('.btn')
 btn1.addEventListener('click',()=>{
 	const str = withSpace.value
 	const toArr = str.split('\n')
-	const newStr = toArr.map((val,index)=>{
-		return autoSpace.checkEnNum(val) ? val : null
+	const newStr = toArr.filter((val,index)=>{
+		return autoSpace.checkEnNum(val)
 	}).join('\n')
 	confirm( newStr+'\n\n是否要复制结果？' ) && btn1.setAttribute('data-clipboard-text',newStr)
 })
