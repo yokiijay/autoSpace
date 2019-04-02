@@ -105,5 +105,5 @@ btn1.addEventListener('click',()=>{
 	const newStr = toArr.map((val,index)=>{
 		return autoSpace.checkEnNum(val) ? val : null
 	}).join('\n')
-	confirm( str+'\n\n是否要复制结果？' ) && btn1.setAttribute('data-clipboard-text',str)
+	confirm( newStr+'\n\n是否要复制结果？' ) && btn1.setAttribute('data-clipboard-text',newStr)
 })
