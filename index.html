@@ -9,6 +9,7 @@
       <link type="text/css" rel="stylesheet" href="stylesheets/theme.css" />
       <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
       <link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_1104382_sihsmxcsw.css">
+      <script src="https://cdn.bootcss.com/clipboard.js/2.0.4/clipboard.min.js"></script>
       <meta http-equiv="x-dns-prefetch-control" content="off"/>
    </head>
    <body>
@@ -63,6 +64,7 @@
                <div class="large-6 medium-6 columns">
                   <label for="new_post" style="color: white;">转好了</label>
                   <textarea onclick="this.select();document.execCommand('Copy');alert('已复制')" class="with-space" rows="15" style="font-size: 12pt;cursor: pointer;" readonly></textarea>
+                  <button id="utils-1" class="btn" data-clipboard-text=''>匹配 英文|数字</button>
                </div>
             </div>
          </section>

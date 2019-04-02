@@ -469,3 +469,14 @@ input[type=text]:disabled {
   background: none;
   border-color: #373737;
 }
+
+button {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: .8em;
+  background: #444488;
+  outline: none;
+}
+button:hover {
+  background: #5555cc;
+}

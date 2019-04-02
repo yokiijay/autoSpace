@@ -147,6 +147,10 @@ function AutoSpace() {
         return str
     }
 
+    this.checkEnNum = (str)=>{
+        return /[a-zA-Z]+|[0-9]+/g.test(str)
+    }
+
     // 计算字符个数 如 中文两个字符 英文一个
     String.prototype.gblen = function() {    
         var len = 0;    

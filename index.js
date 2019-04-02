@@ -92,3 +92,18 @@ new Array(noSpace, min, max, insert, ...radioInsert, ...radioPunc, puncList, rep
 			// console.log( localStorage )
 	 })
 })
+
+
+/* utils 按钮功能 2019-04-02新需求 */
+//  获取按钮
+const btn1 = document.querySelector('#utils-1')
+const clipboard = new ClipboardJS('.btn')
+
+btn1.addEventListener('click',()=>{
+	const str = withSpace.value
+	const toArr = str.split('\n')
+	const newStr = toArr.map((val,index)=>{
+		return autoSpace.checkEnNum(val) ? val : null
+	}).join('\n')
+	confirm( str+'\n\n是否要复制结果？' ) && btn1.setAttribute('data-clipboard-text',str)
+})
